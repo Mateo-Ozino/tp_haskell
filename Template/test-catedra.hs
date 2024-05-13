@@ -86,7 +86,7 @@ testsEjcombinacionesVigenere = test [
 
 -- Funciones útiles
 
--- margetFloat(): Float
+-- margenFloat(): Float
 -- asegura: res es igual a 0.00001
 margenFloat = 0.00001
 

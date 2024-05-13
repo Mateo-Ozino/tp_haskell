@@ -7,17 +7,26 @@ import Data.Char
 -- Integrante4: { 19091229, Elias Ramon Duarte Cardozo }
 -- Integrantes que abandonaron la materia: {}
 
+-- a = 97
+-- z = 122
+
 -- EJ 1
 esMinuscula :: Char -> Bool
-esMinuscula _ = True
+esMinuscula c = ord c >= 97 && ord c <= 122
 
 -- EJ 2
 letraANatural :: Char -> Int
-letraANatural _ = 1
+letraANatural c = ord c - 97
 
 -- EJ 3
 desplazar :: Char -> Int -> Char
-desplazar _ _ = 'd'
+desplazar c n
+            | not (esMinuscula c) = c  
+            -- | n >= 0 = chr (ord c + mod n 26)
+            -- | otherwise = chr (ord c + mod n (-26))
+            -- | n >= -25 && n <= 25 = chr (ord c + n)
+            -- | otherwise = chr (ord c + (n - 26))
+            
 
 -- EJ 4
 cifrar :: String -> Int -> String
