@@ -22,27 +22,69 @@ letraANatural c = ord c - 97
 desplazar :: Char -> Int -> Char
 desplazar c n
             | not (esMinuscula c) = c  
-            -- | n >= 0 = chr (ord c + mod n 26)
-            -- | otherwise = chr (ord c + mod n (-26))
-            -- | n >= -25 && n <= 25 = chr (ord c + n)
-            -- | otherwise = chr (ord c + (n - 26))
-            
+            | otherwise = chr (desplazarAux c n)
+
+desplazarAux :: Char -> Int -> Int
+desplazarAux c n
+                | ord c + n > ord 'z' = desplazarAux c (n-26) -- me paso de 'z'
+                | ord c + n < ord 'a' = desplazarAux c (n+26) -- no llego a 'a'
+                | otherwise = ord c + n
 
 -- EJ 4
 cifrar :: String -> Int -> String
-cifrar _ _ = "frpsxwdflrq"
+cifrar [] _ = []
+cifrar (c:cs) n
+              | not (esMinuscula c) = c:cifrar cs n
+              | otherwise = desplazar c n : cifrar cs n
 
 -- EJ 5
 descifrar :: String -> Int -> String
-descifrar _ _ = "computacion"
+descifrar s n = cifrar s (-n)
 
 -- EJ 6
 cifrarLista :: [String] -> [String]
-cifrarLista _ = ["compu", "mbcp", "kpvtq"]
+cifrarLista [] = []
+cifrarLista list = cifrarListaAux list 0
+
+cifrarListaAux :: [String] -> Int -> [String]
+cifrarListaAux [] _ = []
+cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs (n + 1)
 
 -- EJ 7
 frecuencia :: String -> [Float]
-frecuencia _ = [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0]
+frecuencia (x:xs)
+                | not (todasMinusculas (x:xs)) = crearListaDe0s 26
+                | otherwise = frecuenciaAux (x:xs) abecedario
+
+frecuenciaAux :: String -> String -> [Float]
+frecuenciaAux _ [] = []
+frecuenciaAux string stringIterable = porcentajeApariciones string (head stringIterable) : frecuenciaAux string (tail stringIterable)
+
+abecedario :: [Char]
+abecedario = abecedarioDesde 'a'
+
+abecedarioDesde :: Char -> [Char]
+abecedarioDesde 'z' = ['z']
+abecedarioDesde c = c : abecedarioDesde (chr (ord c + 1))
+
+crearListaDe0s :: Int -> [Float]
+crearListaDe0s n
+              | n > 0 = 0.0 : crearListaDe0s (n - 1)
+              | otherwise = []
+
+contarApariciones :: Eq t => [t] -> t -> Int
+contarApariciones [] _ = 0
+contarApariciones (x:xs) item
+                            | item == x = 1 + contarApariciones xs item
+                            | otherwise = contarApariciones xs item
+
+porcentajeApariciones :: Eq t => [t] -> t -> Float
+porcentajeApariciones [] _ = 0
+porcentajeApariciones list item = fromIntegral(contarApariciones list item * 100) / fromIntegral (length list)
+
+todasMinusculas :: String -> Bool
+todasMinusculas [] = True
+todasMinusculas (x:xs) = esMinuscula x && todasMinusculas xs
 
 -- Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
