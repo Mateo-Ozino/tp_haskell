@@ -88,11 +88,28 @@ todasMinusculas (x:xs) = esMinuscula x && todasMinusculas xs
 
 -- Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
-cifradoMasFrecuente _ _ = ('o', 33.333336)
+cifradoMasFrecuente palabra nPosiciones  = (chr (ord 'a' + posicionElemento 0 (maximo (frecuencia (cifrar palabra nPosiciones))) (frecuencia (cifrar palabra nPosiciones))) ,maximo (frecuencia (cifrar palabra nPosiciones)))
+
+maximo:: Ord t => [t] -> t -- recibe: lista con elementos(números en este caso) y devuelve: elemento (número) más grande, en el caso de 2 o más elementos iguales devuelve el primer elemento
+maximo (x:[]) = x 
+maximo (x:y:xs) 
+                | x >= y = maximo (x:xs)
+                | otherwise = maximo (y:xs)
+
+posicionElemento :: Eq t => Int -> t -> [t] -> Int -- recibe: valor inicial de posición = 0, el elemento buscado, la lista con el elemento y devuelve: posición de elemento
+posicionElemento n elem (x:xs)  
+                                | x == elem  = n
+                                | otherwise = posicionElemento (n+1) elem xs
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
-esDescifrado _ _ = False
+esDescifrado palabra1 palabra2 = esDescifradoAux palabra1 palabra2 0
+
+esDescifradoAux :: String -> String -> Int -> Bool
+esDescifradoAux _ _ 26 = False
+esDescifradoAux palabra1 palabra2 n
+                                    |palabra2 == cifrar palabra1 n = True
+                                    |otherwise = esDescifradoAux palabra1 palabra2 (n+1)
 
 -- EJ 10
 todosLosDescifrados :: [String] -> [(String, String)]
