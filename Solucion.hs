@@ -106,14 +106,28 @@ esDescifrado :: String -> String -> Bool
 esDescifrado palabra1 palabra2 = esDescifradoAux palabra1 palabra2 0
 
 esDescifradoAux :: String -> String -> Int -> Bool
-esDescifradoAux _ _ 26 = False
+esDescifradoAux _ _ 26 = False -- caso base "26" porque vuelve a cifrar igual que con "0"
 esDescifradoAux palabra1 palabra2 n
-                                    |palabra2 == cifrar palabra1 n = True
-                                    |otherwise = esDescifradoAux palabra1 palabra2 (n+1)
+                                    | palabra2 == cifrar palabra1 n = True
+                                    | otherwise = esDescifradoAux palabra1 palabra2 (n+1)
 
 -- EJ 10
 todosLosDescifrados :: [String] -> [(String, String)]
-todosLosDescifrados _ = [("compu", "frpsx"), ("frpsx", "compu")]
+todosLosDescifrados [] = []
+todosLosDescifrados (x:[]) = []
+todosLosDescifrados listaPalabras = todosLosDescifradosAux listaPalabras -- Solamente entra si tiene más de 1 elemento
+
+todosLosDescifradosAux :: [String] ->[(String, String)]
+todosLosDescifradosAux (x:[]) = [] --Esta repetido pero es para cortar la recurcion, si era parte de una pareja ya esta incluido 
+todosLosDescifradosAux(x:xs) = buscarDesifrado x xs ++ todosLosDescifradosAux xs
+                            
+buscarDesifrado :: String -> [String] -> [(String,String)]
+buscarDesifrado _ [] = [] -- Es para cortar la recurcion
+buscarDesifrado palabra1 (palabra2:listaPalabras)
+                                                | esDescifrado palabra1 palabra2 = [(palabra1, palabra2),(palabra2, palabra1)] -- al poner las dos tuplas, puedo descartar el elemento que estoy comparando (palabra1) sin el riesgo de perder la tupla inversa
+                                                | otherwise = buscarDesifrado palabra1 listaPalabras
+
+
 
 -- EJ 11
 expandirClave :: String -> Int -> String
