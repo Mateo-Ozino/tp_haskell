@@ -98,7 +98,7 @@ maximo (x:y:xs)
 
 posicionElemento :: Eq t => Int -> t -> [t] -> Int -- recibe: valor inicial de posición = 0, el elemento buscado, la lista con el elemento y devuelve: posición de elemento
 posicionElemento n elem (x:xs)  
-                                | x == elem  = n
+                                | x == elem = n
                                 | otherwise = posicionElemento (n+1) elem xs
 
 -- EJ 9
@@ -127,24 +127,67 @@ buscarDesifrado palabra1 (palabra2:listaPalabras)
                                                 | esDescifrado palabra1 palabra2 = [(palabra1, palabra2),(palabra2, palabra1)] -- al poner las dos tuplas, puedo descartar el elemento que estoy comparando (palabra1) sin el riesgo de perder la tupla inversa
                                                 | otherwise = buscarDesifrado palabra1 listaPalabras
 
-
-
 -- EJ 11
 expandirClave :: String -> Int -> String
-expandirClave _ _ = "compucom"
+expandirClave (x:xs) n
+                      | length (x:xs) == n = (x:xs)
+                      | length (x:xs) > n = expandirClaveAux (x:xs) n
+                      | otherwise = expandirClave (x:xs ++ x:xs) n -- Se duplica la clave para luego ser recortada en la 2 guarda
+
+-- Corta una palabra según un determinado n (menor a la longitud de la palabra)
+expandirClaveAux :: String -> Int -> String
+expandirClaveAux (x:xs) n
+                        | n > 0 = x: expandirClaveAux xs (n - 1)
+                        | otherwise = []
 
 -- EJ 12
 cifrarVigenere :: String -> String -> String
-cifrarVigenere _ _ = "kdueciirqdv"
+cifrarVigenere [] _ = []
+cifrarVigenere s clave = desplazar (head s) (letraANatural (head claveExpandida)) : cifrarVigenere (tail s) (tail claveExpandida)
+                      where claveExpandida = expandirClave clave (length s)
 
 -- EJ 13
+-- ! Chequear si se puede hacer sin repetir codigo
 descifrarVigenere :: String -> String -> String
-descifrarVigenere _ _ = "computacion"
+descifrarVigenere [] _ = []
+descifrarVigenere s clave = desplazar (head s) (- (letraANatural (head claveExpandida))) : descifrarVigenere (tail s) (tail claveExpandida)
+                      where claveExpandida = expandirClave clave (length s)
 
 -- EJ 14
+-- ! Consultar congruencia con ejemplo de enunciado
 peorCifrado :: String -> [String] -> String
-peorCifrado _ _ = "asdef"
+peorCifrado s [x] = x
+peorCifrado s (x:y:xs)
+                    | distanciaEntreSecuenciasDeChars (cifrarVigenere s x) (expandirClave x (length s)) <= distanciaEntreSecuenciasDeChars (cifrarVigenere s y) (expandirClave y (length s)) = peorCifrado s (x:xs)
+                    | otherwise = peorCifrado s (y:xs)
+
+distanciaEntreSecuenciasDeChars :: [Char] -> [Char] -> Int
+distanciaEntreSecuenciasDeChars l1 l2 = distanciaEntreSecuencias (listaDeCharsANatural l1) (listaDeCharsANatural l2)
+
+listaDeCharsANatural :: [Char] -> [Int]
+listaDeCharsANatural [x] = [letraANatural x]
+listaDeCharsANatural (x:xs) = letraANatural x : listaDeCharsANatural xs
+
+distanciaEntreSecuencias :: [Int] -> [Int] -> Int
+distanciaEntreSecuencias [] _ = 0
+distanciaEntreSecuencias (x:xs) (y:ys) = modulo (x - y) + distanciaEntreSecuencias xs ys
+
+modulo :: Int -> Int
+modulo n
+        | n < 0 = (-n)
+        | otherwise = n
 
 -- EJ 15
 combinacionesVigenere :: [String] -> [String] -> String -> [(String, String)]
-combinacionesVigenere _ _ _ = [("hola", "b")]
+combinacionesVigenere [] _ _ = []
+combinacionesVigenere (msj:msjs) (clave:claves) cifrado
+                                                      | cifrarVigenere msj clave == cifrado = [(msj, clave)] ++ combinacionesVigenere msjs (clave:claves) cifrado
+                                                      | otherwise = combinacionesVigenereAux msj (clave:claves) cifrado ++ combinacionesVigenere msjs (clave:claves) cifrado
+
+combinacionesVigenereAux :: String -> [String] -> String -> [(String, String)]
+combinacionesVigenereAux _ [] _ = []
+combinacionesVigenereAux msj (clave:claves) cifrado
+                                                  | cifrarVigenere msj clave == cifrado = [(msj, clave)] ++ combinacionesVigenereAux msj claves cifrado
+                                                  | otherwise = combinacionesVigenereAux msj claves cifrado
+
+--"ltmcn"
