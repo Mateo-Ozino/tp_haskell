@@ -1,6 +1,7 @@
 import Test.HUnit
 import Solucion
 import Data.List
+import Data.Char (ord, chr)
 -- No está permitido agregar nuevos imports.
 
 runCatedraTests = runTestTT allTests
@@ -25,23 +26,42 @@ allTests = test [
 
 
 testsEjesMinuscula = test [
-    esMinuscula 'd' ~?= True
+    esMinuscula 'd' ~?= True,
+    esMinuscula 'a' ~?= True,
+    esMinuscula 'b' ~?= True,
+    esMinuscula 'A' ~?= False,
+    esMinuscula '?' ~?= False
     ]
 
 testsEjletraANatural = test [
-    letraANatural 'b' ~?= 1
+    letraANatural 'b' ~?= 1,
+    letraANatural 'a' ~?= 0,
+    letraANatural 'z' ~?= 25,
+    letraANatural 'k' ~?= 10
     ]
 
 testsEjdesplazar = test [
-    desplazar 'a' 3 ~?= 'd'
+    desplazar 'a' 3 ~?= 'd',
+    desplazar 'c' 1 ~?= 'd',
+    desplazar 'z' 1 ~?= 'a',
+    desplazar 'a' 25 ~?= 'z',
+    desplazar 'a' 26 ~?= 'a'
     ]
 
 testsEjcifrar = test [
-    cifrar "computacion" 3 ~?= "frpsxwdflrq"
+    cifrar "computacion" 3 ~?= "frpsxwdflrq",
+    cifrar "taller" 1 ~?= "ubmmfs",
+    cifrar "hola" 26 ~?= "hola",
+    cifrar "hola" 25 ~?= "gnkz",
+    cifrar "zzz" 25 ~?= "yyy"
     ]
 
 testsEjdescifrar = test [
-    descifrar "frpsxwdflrq" 3 ~?= "computacion"
+    descifrar "frpsxwdflrq" 3 ~?= "computacion",
+    descifrar "ubmmfs" 1 ~?= "taller",
+    descifrar "hola" 26 ~?= "hola",
+    descifrar "gnkz" 25 ~?= "hola",
+    descifrar "yyy" 25 ~?= "zzz"
     ]
 
 testsEjcifrarLista = test [
@@ -53,7 +73,8 @@ testsEjfrecuencia = test [
     ]
 
 testsEjcifradoMasFrecuente = test [
-    cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
+    -- cifradoMasFrecuente "taller" 3 ~?= (’o’, 33.333336)
+    aproximado (snd (cifradoMasFrecuente "taller" 3)) 33.333336 ~?= True 
     ]
 
 testsEjesDescifrado = test [
@@ -83,6 +104,10 @@ testsEjpeorCifrado = test [
 testsEjcombinacionesVigenere = test [
     combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")]
     ]
+
+-- Insumos de tests
+abecedarioLista = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+-- abecedarioCifrado = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','y']
 
 -- Funciones útiles
 

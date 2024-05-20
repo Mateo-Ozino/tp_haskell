@@ -154,7 +154,7 @@ descifrarVigenere s clave = desplazar (head s) (- (letraANatural (head claveExpa
                       where claveExpandida = expandirClave clave (length s)
 
 -- EJ 14
--- ! Consultar congruencia con ejemplo de enunciado
+-- ! Consultar congruencia con ejemplo de enunciado. CONSULTAR EN FORO
 peorCifrado :: String -> [String] -> String
 peorCifrado s [x] = x
 peorCifrado s (x:y:xs)
@@ -190,4 +190,3 @@ combinacionesVigenereAux msj (clave:claves) cifrado
                                                   | cifrarVigenere msj clave == cifrado = [(msj, clave)] ++ combinacionesVigenereAux msj claves cifrado
                                                   | otherwise = combinacionesVigenereAux msj claves cifrado
 
---"ltmcn"
