@@ -158,7 +158,7 @@ descifrarVigenere s clave = desplazar (head s) (- (letraANatural (head claveExpa
 peorCifrado :: String -> [String] -> String
 peorCifrado s [x] = x
 peorCifrado s (x:y:xs)
-                    | distanciaEntreSecuenciasDeChars (cifrarVigenere s x) (expandirClave x (length s)) <= distanciaEntreSecuenciasDeChars (cifrarVigenere s y) (expandirClave y (length s)) = peorCifrado s (x:xs)
+                    | distanciaEntreSecuenciasDeChars (cifrarVigenere s x) s <= distanciaEntreSecuenciasDeChars (cifrarVigenere s y) s = peorCifrado s (x:xs)
                     | otherwise = peorCifrado s (y:xs)
 
 distanciaEntreSecuenciasDeChars :: [Char] -> [Char] -> Int
