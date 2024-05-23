@@ -1,9 +1,8 @@
 import Test.HUnit
 import Solucion
 import Data.List
--- No está permitido agregar nuevos imports.
 
-runCatedraTests = runTestTT allTests
+runTests = runTestTT allTests
 
 allTests = test [
     "esMinuscula" ~: testsEjesMinuscula,
@@ -22,7 +21,6 @@ allTests = test [
     "peorCifrado" ~: testsEjpeorCifrado,
     "combinacionesVigenere" ~: testsEjcombinacionesVigenere
     ]
-
 
 testsEjesMinuscula = test [
     esMinuscula 'd' ~?= True,
@@ -80,7 +78,7 @@ testsEjfrecuencia = test [
 
 testsEjcifradoMasFrecuente = test [
     -- cifradoMasFrecuente "taller" 3 ~?= (’o’, 33.333336)
-    aproximado (snd (cifradoMasFrecuente "taller" 3)) 33.333336 ~?= True 
+    aproximado (snd (cifradoMasFrecuente "taller" 3)) 33.333336 ~?= True ,
     aproximado (snd (cifradoMasFrecuente "abcc" 3 )) 50.0 ~?= True
     ]
 
