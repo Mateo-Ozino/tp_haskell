@@ -1,7 +1,6 @@
 import Test.HUnit
 import Solucion
 import Data.List
-import Data.Char (ord, chr)
 -- No está permitido agregar nuevos imports.
 
 runCatedraTests = runTestTT allTests
@@ -65,13 +64,19 @@ testsEjdescifrar = test [
     ]
 
 testsEjcifrarLista = test [
-    cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"]
+    cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"],
+    cifrarLista ["a", "b", "c"] ~?= ["a", "c", "e"],
+    cifrarLista ["AaAa", "bBbB"] ~?= ["AaAa", "cBcB"],
+    cifrarLista [] ~?= [],
+    cifrarLista ["bbbb", "aaaa"] ~?= ["bbbb", "bbbb"]
     ]
 
 testsEjfrecuencia = test [
-    expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0]
+    expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
+    expectlistProximity (frecuencia "") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    expectlistProximity (frecuencia "AA") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
     ]
-
+--[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 testsEjcifradoMasFrecuente = test [
     -- cifradoMasFrecuente "taller" 3 ~?= (’o’, 33.333336)
     aproximado (snd (cifradoMasFrecuente "taller" 3)) 33.333336 ~?= True 
@@ -98,7 +103,11 @@ testsEjdescifrarVigenere = test [
     ]
 
 testsEjpeorCifrado = test [
-    peorCifrado "computacion" ["ip", "asdef", "ksy"] ~?= "asdef"
+    peorCifrado "computacion" ["ip", "asdef", "ksy"] ~?= "asdef",
+    peorCifrado "computacion" ["aaa","bbb"] ~?= "aaa",
+    peorCifrado "computacion" ["aaa"] ~?= "aaa",
+    peorCifrado "computacion" ["aaa","aaa","bbb"] ~?= "aaa",
+    expectAny (peorCifrado "" ["aaa","bbb"]) ["aaa","bbb"]
     ]
 
 testsEjcombinacionesVigenere = test [
