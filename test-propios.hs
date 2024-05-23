@@ -74,16 +74,21 @@ testsEjcifrarLista = test [
 testsEjfrecuencia = test [
     expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "AA") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+    expectlistProximity (frecuencia "AA") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    expectlistProximity (frecuencia "ab") [50.0,50.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
     ]
---[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+
 testsEjcifradoMasFrecuente = test [
     -- cifradoMasFrecuente "taller" 3 ~?= (’o’, 33.333336)
     aproximado (snd (cifradoMasFrecuente "taller" 3)) 33.333336 ~?= True 
+    aproximado (snd (cifradoMasFrecuente "abcc" 3 )) 50.0 ~?= True
     ]
 
 testsEjesDescifrado = test [
-    esDescifrado "taller" "compu" ~?= False
+    esDescifrado "taller" "compu" ~?= False,
+    esDescifrado "aaa" "bbb" ~?= True,
+    esDescifrado "aza" "bab" ~?= True,
+    esDescifrado "aaa" "aab" ~?= False
     ]
 
 testsEjtodosLosDescifrados = test [
@@ -117,6 +122,8 @@ testsEjcombinacionesVigenere = test [
 -- Insumos de tests
 abecedarioLista = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 -- abecedarioCifrado = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','y']
+--[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+
 
 -- Funciones útiles
 
