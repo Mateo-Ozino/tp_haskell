@@ -52,6 +52,7 @@ cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs (n + 1)
 
 -- EJ 7
 frecuencia :: String -> [Float]
+frecuencia "" = crearListaDe0s 26
 frecuencia (x:xs)
                 | not (todasMinusculas (x:xs)) = crearListaDe0s 26
                 | otherwise = frecuenciaAux (x:xs) abecedario
@@ -114,7 +115,9 @@ esDescifradoAux palabra1 palabra2 n
 -- EJ 10
 todosLosDescifrados :: [String] -> [(String, String)]
 todosLosDescifrados [] = []
-todosLosDescifrados (x:[]) = []
+todosLosDescifrados (x:[])
+                          | not (todasMinusculas x) = [(x,x)]
+                          | otherwise = []
 todosLosDescifrados listaPalabras = todosLosDescifradosAux listaPalabras -- Solamente entra si tiene más de 1 elemento
 
 todosLosDescifradosAux :: [String] ->[(String, String)]
@@ -124,6 +127,8 @@ todosLosDescifradosAux(x:xs) = buscarDesifrado x xs ++ todosLosDescifradosAux xs
 buscarDesifrado :: String -> [String] -> [(String,String)]
 buscarDesifrado _ [] = [] -- Es para cortar la recurcion
 buscarDesifrado palabra1 (palabra2:listaPalabras)
+                                                | palabra1 == "" = [(palabra1,palabra1)]
+                                                | not (todasMinusculas palabra1) = [(palabra1,palabra1)] 
                                                 | esDescifrado palabra1 palabra2 = [(palabra1, palabra2),(palabra2, palabra1)] -- al poner las dos tuplas, puedo descartar el elemento que estoy comparando (palabra1) sin el riesgo de perder la tupla inversa
                                                 | otherwise = buscarDesifrado palabra1 listaPalabras
 
@@ -156,6 +161,7 @@ descifrarVigenere s clave = desplazar (head s) (- (letraANatural (head claveExpa
 -- EJ 14
 -- ! Consultar congruencia con ejemplo de enunciado. CONSULTAR EN FORO
 peorCifrado :: String -> [String] -> String
+peorCifrado "" xs = head(xs)
 peorCifrado s [x] = x
 peorCifrado s (x:y:xs)
                     | distanciaEntreSecuenciasDeChars (cifrarVigenere s x) s <= distanciaEntreSecuenciasDeChars (cifrarVigenere s y) s = peorCifrado s (x:xs)
